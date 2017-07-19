@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include <machine/cpu-features.h>
-
+//#ifdef __BIONIC__
+    //#include <machine/cpu-features.h>
+         
+//#else    
+    //#include <machine/cpu-features.h>
+//#endif    
+ 
+  
     .text
     .align
 

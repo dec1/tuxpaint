@@ -127,3 +127,7 @@ endif
 LOCAL_EXPORT_C_INCLUDES += $(LOCAL_C_INCLUDES)
 
 include $(BUILD_SHARED_LIBRARY)
+
+# just for google ndk
+#$(call import-module,android/cpufeatures)
+

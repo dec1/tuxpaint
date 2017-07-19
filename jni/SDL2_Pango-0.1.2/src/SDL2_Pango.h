@@ -32,6 +32,8 @@
 
 #include "SDL2/begin_code.h"
 
+#include "../../SDL2_ttf/external/freetype-2.4.12/include/freetype/ftimage.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -156,7 +158,7 @@ extern DECLSPEC void SDLCALL SDLPango_SetBaseDirection(
     SDLPango_Direction direction);
 
 
-#ifdef __FT2_BUILD_UNIX_H__
+//#ifdef __FT2_BUILD_UNIX_H__
 
 extern DECLSPEC void SDLCALL SDLPango_CopyFTBitmapToSurface(
     const FT_Bitmap *bitmap,
@@ -164,7 +166,7 @@ extern DECLSPEC void SDLCALL SDLPango_CopyFTBitmapToSurface(
     const SDLPango_Matrix *matrix,
     SDL_Rect *rect);
 
-#endif	/* __FT2_BUILD_UNIX_H__ */
+//#endif	/* __FT2_BUILD_UNIX_H__ */
 
 
 #ifdef __PANGO_H__
