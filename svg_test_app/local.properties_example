@@ -1,0 +1,14 @@
+
+
+# This contains example entries, that must be found in 'local.properties'.
+# This file (unlike local.properties) is designed to be checked into source control.
+# Copy the lines below into local.properties as a starting point, and modify as necessary for your local machine
+
+
+
+ndk.dir=/home/declan/Documents/zone/mid/bin/android/crystax/crystax-ndk-10.3.2
+ndk.dir.nightly=/home/declan/Documents/zone/mid/bin/android/crystax/crystax-ndk-10.3.2_dec9
+
+tux.dir=/home/declan/Documents/zone/mid/bin/android/svg/tux/tuxpaint-android
+
+sdk.dir=/home/declan/Documents/zone/mid/bin/android/google/sdk

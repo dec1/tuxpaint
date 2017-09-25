@@ -1,0 +1,183 @@
+apply plugin: 'com.android.model.application'
+
+//-------------------------------
+
+
+
+def my_inc =     [
+
+
+
+        glib_inc_dir(),
+        glib_inc_dir2(),
+        glib_inc_dir3(),
+        glib_inc_dir4(),
+
+        gdk_pixbuf_inc_dir(),
+        cairo_inc_dir(),
+        png_inc_dir(),
+        rsvg_inc_dir(),
+
+
+        //platform_inc_dir(),
+]
+//-------------------------------------------------
+def my_incs =     my_inc.collect{ "-I"  + file(it)}
+//---------------------------------------------------
+
+model {
+
+
+    android {
+
+        compileSdkVersion = my_compileSdkVersion()
+        buildToolsVersion = my_buildToolsVersion()
+
+
+        defaultConfig {
+            minSdkVersion.apiLevel = my_minSdkVersion()
+            targetSdkVersion.apiLevel = my_targetSdkVersion()
+
+            applicationId = 'com.jenetric.livestage.svg'
+            versionCode = 1
+            versionName = '1.0'
+        }
+
+        abis{
+            my_abis().each { abi ->
+                create(abi) {
+                     ldFlags.add("-L${crystax_lib_dir(abi)}".toString())   // somehow need this but no others !! ?
+                }
+            }
+        }
+
+        ndk {
+            moduleName = 'livestage'
+            //------------------------------
+
+            platformVersion = platform_ver() // defaultConfig.minSdkVersion.apiLevel.asType(Integer) // keep equal to minSdk
+            toolchain = tc_name()
+            toolchainVersion = tc_ver()
+            stl = std_lib()
+            //--------------------------------
+            cppFlags.addAll(['-std=c++14', '-frtti', '-fexceptions'])
+            cppFlags.addAll(my_incs)
+
+            ldLibs.addAll(['log'])
+            abiFilters.addAll(my_abis())
+        }
+        sources {
+            main {
+                jni {
+
+                    exportedHeaders
+                    {
+                        srcDirs "src/main/jni",
+                                "src/main/jni/dm_utils"
+                    }
+
+
+                    dependencies {
+
+                        // project ':lib:image_operations'
+
+                        library 'crystax'                   linkage 'shared'
+
+
+
+//------------------------------------------------------------------------------
+
+                     //   library 'z'                         linkage 'shared'
+                     //   library 'dl'                        linkage 'shared'
+
+
+                        library 'tuxpaint_xml2'            linkage 'shared'
+                        library 'tuxpaint_iconv'           linkage 'shared'
+                        library 'tuxpaint_fontconfig'      linkage 'shared'
+                        library 'tuxpaint_png'             linkage 'shared'
+                        library 'tuxpaint_freetype'        linkage 'shared'
+                        library 'tuxpaint_pixman'          linkage 'shared'
+                        library 'tuxpaint_cairo'           linkage 'shared'
+
+                        library 'tuxpaint_ffi'              linkage 'shared'
+                        library 'SDL2'                      linkage 'shared'
+                        library 'tp_android_assets_fopen'   linkage 'shared'
+                        library 'tuxpaint_intl'             linkage 'shared'
+                        library 'tuxpaint_glib'             linkage 'shared'
+                        library 'tuxpaint_harfbuzz_ng'      linkage 'shared'
+                        library 'tuxpaint_gdk_pixbuf'       linkage 'shared'
+                        library 'tuxpaint_pango'            linkage 'shared'
+                        library 'tuxpaint_croco'            linkage 'shared'
+
+                        library 'tuxpaint_rsvg'             linkage 'shared'
+
+//------------------------------------------------------------------------------
+
+
+                    }
+                }
+            }
+        }
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles.add(file('proguard-android.txt'))
+            }
+        }
+    }
+
+    repositories {
+        libs(PrebuiltLibraries) {
+
+
+            crystax         { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${crystax_lib_dir  (targetPlatform.getName())}/libcrystax.so") } }
+
+
+//------------------------------------------------------------------------------
+
+         //   z               { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${platform_lib_dir()}/libz.so") } }
+         //   dl              { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${platform_lib_dir()}/libdl.so") } }
+
+            tuxpaint_xml2           { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_xml2.so") } }
+            tuxpaint_iconv          { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_iconv.so") } }
+            tuxpaint_fontconfig     { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_fontconfig.so") } }
+            tuxpaint_png            { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_png.so") } }
+            tuxpaint_freetype       { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_freetype.so") } }
+            tuxpaint_pixman         { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_pixman.so") } }
+            tuxpaint_cairo          { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_cairo.so") } }
+
+            tuxpaint_ffi            { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_ffi.so") } }
+            SDL2                    { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libSDL2.so") } }
+            tp_android_assets_fopen { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtp_android_assets_fopen.so") } }
+            tuxpaint_intl           { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_intl.so") } }
+            tuxpaint_glib           { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_glib.so") } }
+            tuxpaint_harfbuzz_ng    { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_harfbuzz_ng.so") } }
+            tuxpaint_gdk_pixbuf     { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_gdk_pixbuf.so") } }
+            tuxpaint_pango          { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_pango.so") } }
+            tuxpaint_croco          { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_croco.so") } }
+
+            tuxpaint_rsvg          { binaries.withType(SharedLibraryBinary) { sharedLibraryFile = file("${tux_lib_dir      (targetPlatform.getName())}/libtuxpaint_rsvg.so") } }
+
+//------------------------------------------------------------------------------
+            //--------------------------------------
+
+            //--------------------------------------
+        }
+
+    }
+
+    android.lintOptions {  // was getting lint error that apparently was a problemm with lint itself ... maybe doesnt know syntax of new gradle experimental properly yet?
+        abortOnError false
+    }
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+     // compile project(':img_op')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+}
+
+
+//----------------------------------------------------------------------------------------
