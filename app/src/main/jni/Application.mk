@@ -2,6 +2,7 @@
 
 APP_PLATFORM := android-14
 APP_CFLAGS += -Wno-error=format-security
+APP_CPPFLAGS += -std=c++14
 APP_STL := c++_shared
 # stlport_shared
 APP_CPPFLAGS += -fexceptions
